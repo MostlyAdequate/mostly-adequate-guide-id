@@ -64,7 +64,6 @@ Lihat [TRANSLATIONS.md](TRANSLATIONS.md)
 Lihat [FAQ.md](FAQ.md)
 
 
-
 # Rancangan mendatang
 
 * **Bagian 1** (bab 1-7) adalah panduan dasar. Saya telah memperbaruinya karena saya menemukan kesalahan sejak ditetapkanya sebagai draf awal. Jangna ragu untuk membantu!
