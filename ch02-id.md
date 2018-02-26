@@ -1,9 +1,9 @@
-# Chapter 02: First Class Functions
+# Bab 02: Fungsi Kelas Pertama
 
-## A Quick Review
-When we say functions are "first class", we mean they are just like everyone else... so in other words a normal class. We can treat functions like any other data type and there is nothing particularly special about them - they may be stored in arrays, passed around as function parameters, assigned to variables, and what have you.
+## Review Singkat
+Ketika kita mengatakan fungsi "kelas satu", maksud kita sama dengan orang lain... jadi dengan kata lain kelas normal. Kita dapat memperlakukan fungsi seperti tipe data lainnya dan tidak ada yang spesial dari mereka - mereka mungkin disimpan dalam array, dilewatkan sebagai parameter fungsi, ditugaskan ke variabel, dan apa yang Anda miliki.
 
-That is JavaScript 101, but worth mentioning since a quick code search on github will reveal the collective evasion, or perhaps widespread ignorance of this concept. Shall we go for a feigned example? We shall.
+Itu adalah JavaScript 101, tetapi perlu disebutkan sejak pencarian kode cepat di github akan mengungkapkan penghindaran kolektif, atau mungkin ketidaktahuan konsep ini. Haruskah kita mencari contoh tiruan? Tentu.
 
 ```js
 const hi = name => `Hi ${name}`;
