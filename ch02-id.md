@@ -139,4 +139,4 @@ Beberapa orang akan berpendapat bahwa `this` diperlukan untuk mengoptimalkan kec
 
 Dengan itu, kami siap untuk melanjutkan.
 
-[Bab 03: Kebahagiaan Murni dengan Fungsi Murni](ch03.md)
+[Bab 03: Kebahagiaan Pure dengan Fungsi Pure](ch03.md)
