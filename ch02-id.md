@@ -10,8 +10,6 @@ const hi = name => `Hi ${name}`;
 const greeting = name => hi(name);
 ```
 
-Here, the function wrapper around `hi` in `greeting` is completely redundant. Why? Because functions are *callable* in JavaScript. When `hi` has the `()` at the end it will run and return a value. When it does not, it simply returns the function stored in the variable. Just to be sure, have a look yourself:
-
 Di sini, pembungkus fungsi sekitar `hi` di dalam `greeting` benar-benar berlebihan. Mengapa? Karena fungsinya *callable* di JavaScript. Jika `hi` memiliki akhiran `()` akan berjalan dan mengembalikan nilainya. Jika tidak, itu hanya akan mengembalikan fungsi yang tersimpan dalam variabel. Hanya untuk memastikan, lihatlah:
 
 
@@ -20,7 +18,6 @@ hi; // name => `Hi ${name}`
 hi("jonas"); // "Hi jonas"
 ```
 
-Since `greeting` is merely in turn calling `hi` with the very same argument, we could simply write:
 Karena `greeting` hanya saat gilirannya memanggil `hi` dengan argumen yang sama, kita bisa menulis:
 
 ```js
@@ -28,15 +25,11 @@ const greeting = hi;
 greeting("times"); // "Hi times"
 ```
 
-In other words, `hi` is already a function that expects one argument, why place another function around it that simply calls `hi` with the same bloody argument? It doesn't make any damn sense. It's like donning your heaviest parka in the dead of July just to blast the air and demand an ice lolly.
-
 Dengan kata lain, `hi` sudah merupakan fungsi yang mengharapkan satu argumen, kenapa menempatkan fungsi lain di sekitarnya yang hanya memanggil` hi` dengan argumen yang sama? Itu tidak masuk akal. Ini seperti Anda mengenakan jaket parka terberat di bulan Juli hanya untuk menghembuskan udara dan menagih es lilin.
 
-It is obnoxiously verbose and, as it happens, bad practice to surround a function with another function merely to delay evaluation (we'll see why in a moment, but it has to do with maintenance)
+Hal ini sangat bertele-tele dan seperti yang terjadi, praktik buruk untuk mengelilingi fungsi dengan fungsi lainnya hanya untuk menunda evaluasi (kita akan melihatnya sebentar lagi, tapi ini berkaitan dengan maintenance)
 
-Hal ini sangat verbose dan, seperti yang terjadi, praktik buruk untuk mengelilingi fungsi dengan fungsi lain hanya untuk menunda evaluasi (kita akan melihat mengapa sebentar lagi, tapi ini berkaitan dengan pemeliharaan)
-
-A solid understanding of this is critical before moving on, so let's examine a few more fun examples excavated from the library of npm packages.
+Pemahaman yang solid tentang hal ini penting sebelum beralih nantinya, jadi mari kita periksa beberapa contoh menyenangkan yang diambil dari perpustakaan paket npm.
 
 ```js
 // ignorant
@@ -46,7 +39,7 @@ const getServerStuff = callback => ajaxCall(json => callback(json));
 const getServerStuff = ajaxCall;
 ```
 
-The world is littered with ajax code exactly like this. Here is the reason both are equivalent:
+Dunia dikotori persis dengan kode ajax seperti ini. Inilah alasan keduanya yang setara dengan:
 
 ```js
 // this line
@@ -62,7 +55,7 @@ const getServerStuff = callback => ajaxCall(callback);
 const getServerStuff = ajaxCall; // <-- look mum, no ()'s
 ```
 
-And that, folks, is how it is done. Once more so that we understand why I'm being so persistent.
+Dan itulah folks, dan bagaimana menyelesaikannya. Sekali lagi agar kita mengerti mengapa saya begitu gigih.
 
 ```js
 const BlogController = {
@@ -74,7 +67,7 @@ const BlogController = {
 };
 ```
 
-This ridiculous controller is 99% fluff. We could either rewrite it as:
+Pengendali yang tidak masuk akal ini adalah 99% fluff. Kita bisa menuliskannya kembali sebagai:
 
 ```js
 const BlogController = {
@@ -86,35 +79,36 @@ const BlogController = {
 };
 ```
 
-... or scrap it altogether since it does nothing more than just bundle our Views and Db together.
+... atau bongkar semuanya karena tidak lebih dari sekadar menggabungkan _View_ dan _Db_ kita bersamaan.
 
-## Why Favor First Class?
+## Mengapa Memilih Kelas Pertama?
 
-Okay, let's get down to the reasons to favor first class functions. As we saw in the `getServerStuff` and `BlogController` examples, it's easy to add layers of indirection that provide no added value and only increase the amount of redundant code to maintain and search through.
+Oke, mari terjun ke alasan untuk memilih fungsi kelas pertama. Seperti yang kita lihat di contoh `getServerStuff` dan `BlogController`, mudah untuk menambahkan lapisan tipuan yang tidak memberikan nilai tambahan dan hanya meningkatkan jumlah kode yang berlebihan untuk disimpan dan dicari.
 
-In addition, if such a needlessly wrapped function must be changed, we must also need to change our wrapper function as well.
+Selain itu, fungsi pembungkus yang tidak perlu juga harus diubah, dan kita juga perlu mengubah fungsi pembungkus milik kita juga.
 
 ```js
 httpGet('/post/2', json => renderPost(json));
 ```
 
-If `httpGet` were to change to send a possible `err`, we would need to go back and change the "glue".
+Jika `httpGet` berubah ini memungkinan untuk mengirim `err`, kita perlu kembali dan mengganti "glue".
+
 
 ```js
 // go back to every httpGet call in the application and explicitly pass err along.
 httpGet('/post/2', (json, err) => renderPost(json, err));
 ```
 
-Had we written it as a first class function, much less would need to change:
+Seandainya kita menulisnya sebagai fungsi kelas pertama, akan perlu banyak perubahan:
 
 ```js
 // renderPost is called from within httpGet with however many arguments it wants
 httpGet('/post/2', renderPost);
 ```
 
-Besides the removal of unnecessary functions, we must name and reference arguments. Names are a bit of an issue, you see. We have potential misnomers - especially as the codebase ages and requirements change.
+Selain menghilangkan fungsi yang tidak perlu, kita harus memberi nama dan argumen referensi. Nama adalah salah satu permasalahan, Anda akan melihatnya. Kami memiliki potensi yang tidak tepat - terutama karena usia dan persyaratan kode berubah.
 
-Having multiple names for the same concept is a common source of confusion in projects. There is also the issue of generic code. For instance, these two functions do exactly the same thing, but one feels infinitely more general and reusable:
+Memiliki banyak nama untuk konsep yang sama adalah kebingungan yang umum dalam proyek ini. Ada juga masalah dalam kode generik. Misalnya, kedua fungsi ini melakukan hal yang sama persis, tetapi orang merasa jauh lebih umum dan dapat menggunakan kembali:
 
 ```js
 // specific to our current blog
@@ -125,9 +119,9 @@ const validArticles = articles =>
 const compact = xs => xs.filter(x => x !== null && x !== undefined);
 ```
 
-By using specific naming, we've seemingly tied ourselves to specific data (in this case `articles`). This happens quite a bit and is a source of much reinvention.
+Dengan menggunakan penamaan khusus, tampaknya kami telah mengikatkan diri pada data spesifik (dalam hal ini `articles`). Hal ini kadang-kadang terjadi dan merupakan sumber dari banyak penemuan.
 
-I must mention that, just like with Object-Oriented code, you must be aware of `this` coming to bite you in the jugular. If an underlying function uses `this` and we call it first class, we are subject to this leaky abstraction's wrath.
+Saya harus menyebutkannya, seperti dengan kode Berorientasi Objek, Anda harus sadar bahwa `this` yang datang untuk menggigit Anda di jugular. Jika fungsi yang mendasari menggunakan `this` dan kita menyebutnya kelas pertama, kita tunduk pada abstraksi yang bocor ini.
 
 ```js
 const fs = require('fs');
@@ -139,10 +133,10 @@ fs.readFile('freaky_friday.txt', Db.save);
 fs.readFile('freaky_friday.txt', Db.save.bind(Db));
 ```
 
-Having been bound to itself, the `Db` is free to access its prototypical garbage code. I avoid using `this` like a dirty nappy. There's really no need when writing functional code. However, when interfacing with other libraries, you might have to acquiesce to the mad world around us.
+Setelah terikat pada dirinya sendiri, `Db` bebas untuk mengakses kode sampah prototipikalnya. Saya hindari menggunakan `this` karena seperti popok kotor. Sebenarnya tidak diperlukan saat menulis kode fungsional. Namun, ketika berinteraksi dengan perpustakaan lain, Anda mungkin harus menyetujui dunia yang gila di sekitar kita.
 
-Some will argue that `this` is necessary for optimizing speed. If you are the micro-optimization sort, please close this book. If you cannot get your money back, perhaps you can exchange it for something more fiddly.
+Beberapa orang akan berpendapat bahwa `this` diperlukan untuk mengoptimalkan kecepatan. Jika Anda adalah pengoptimalan mikro, silakan tutup buku ini. Jika Anda tidak bisa mendapatkan kembali uang Anda, mungkin Anda bisa menukarnya dengan sesuatu yang lebih menguntungkan.
 
-And with that, we're ready to move on.
+Dengan itu, kami siap untuk melanjutkan.
 
-[Chapter 03: Pure Happiness with Pure Functions](ch03.md)
+[Bab 03: Kebahagiaan Murni dengan Fungsi Murni](ch03.md)
