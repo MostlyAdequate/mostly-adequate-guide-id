@@ -12,6 +12,8 @@ const greeting = name => hi(name);
 
 Here, the function wrapper around `hi` in `greeting` is completely redundant. Why? Because functions are *callable* in JavaScript. When `hi` has the `()` at the end it will run and return a value. When it does not, it simply returns the function stored in the variable. Just to be sure, have a look yourself:
 
+Di sini, pembungkus fungsi sekitar `hi` di dalam `greeting` benar-benar berlebihan. Mengapa? Karena fungsinya *callable* di JavaScript. Jika `hi` memiliki akhiran `()` akan berjalan dan mengembalikan nilainya. Jika tidak, itu hanya akan mengembalikan fungsi yang tersimpan dalam variabel. Hanya untuk memastikan, lihatlah:
+
 
 ```js
 hi; // name => `Hi ${name}`
@@ -19,6 +21,7 @@ hi("jonas"); // "Hi jonas"
 ```
 
 Since `greeting` is merely in turn calling `hi` with the very same argument, we could simply write:
+Karena `greeting` hanya saat gilirannya memanggil `hi` dengan argumen yang sama, kita bisa menulis:
 
 ```js
 const greeting = hi;
@@ -27,7 +30,11 @@ greeting("times"); // "Hi times"
 
 In other words, `hi` is already a function that expects one argument, why place another function around it that simply calls `hi` with the same bloody argument? It doesn't make any damn sense. It's like donning your heaviest parka in the dead of July just to blast the air and demand an ice lolly.
 
+Dengan kata lain, `hi` sudah merupakan fungsi yang mengharapkan satu argumen, kenapa menempatkan fungsi lain di sekitarnya yang hanya memanggil` hi` dengan argumen yang sama? Itu tidak masuk akal. Ini seperti Anda mengenakan jaket parka terberat di bulan Juli hanya untuk menghembuskan udara dan menagih es lilin.
+
 It is obnoxiously verbose and, as it happens, bad practice to surround a function with another function merely to delay evaluation (we'll see why in a moment, but it has to do with maintenance)
+
+Hal ini sangat verbose dan, seperti yang terjadi, praktik buruk untuk mengelilingi fungsi dengan fungsi lain hanya untuk menunda evaluasi (kita akan melihat mengapa sebentar lagi, tapi ini berkaitan dengan pemeliharaan)
 
 A solid understanding of this is critical before moving on, so let's examine a few more fun examples excavated from the library of npm packages.
 
