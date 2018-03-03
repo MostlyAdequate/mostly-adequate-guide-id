@@ -80,32 +80,32 @@ Efek samping men-diskualifikasi-kan fungsi dari dan menjadi *pure*. Dan itu masu
 
 Mari kita lihat lebih dekat kenapa kita memaksakan output per input yang sama. Singsingkan lengan baju Anda, kita akan melihat beberapa matematika kelas 8.
 
-## 8th Grade Math
+## Matematika Kelas 8
 
-From mathisfun.com:
+Berdasarkan mathisfun.com:
 
-> A function is a special relationship between values:
-> Each of its input values gives back exactly one output value.
+> Fungsi adalah hubungan khusus antara nilai:
+> Masing-masing nilai inputnya memberikan satu nilai output kembali.
 
-In other words, it's just a relation between two values: the input and the output. Though each input has exactly one output, that output doesn't necessarily have to be unique per input. Below shows a diagram of a perfectly valid function from `x` to `y`;
+Dengan kata lain, itu hanya hubungan antara dua nilai: input dan output. Meskipun setiap input memiliki satu output, output itu tidak harus unik per inputnya. Di bawah ini menunjukkan diagram fungsi yang benar-benar valid dari `x` ke `y`;
 
-<img src="images/function-sets.gif" alt="function sets" />(http://www.mathsisfun.com/sets/function.html)
+<img src="images/function-sets.gif" alt="set fungsi" />(http://www.mathsisfun.com/sets/function.html)
 
-To contrast, the following diagram shows a relation that is *not* a function since the input value `5` points to several outputs:
+Sebaliknya, diagram berikut menunjukkan relasi yang *bukan* fungsi karena nilai input `5` adalah poin ke beberapa output:
 
-<img src="images/relation-not-function.gif" alt="relation not function" />(http://www.mathsisfun.com/sets/function.html)
+<img src="images/relation-not-function.gif" alt="relasi bukan fungsi" />(http://www.mathsisfun.com/sets/function.html)
 
-Functions can be described as a set of pairs with the position (input, output): `[(1,2), (3,6), (5,10)]` (It appears this function doubles its input).
+Fungsi dapat digambarkan sebagai satu pasangan dengan posisi (input, output): `[(1,2), (3,6), (5,10)]` (Terlihat fungsi ini menggandakan inputnya).
 
-Or perhaps a table:
+Atau mungkin tabel:
 <table> <tr> <th>Input</th> <th>Output</th> </tr> <tr> <td>1</td> <td>2</td> </tr> <tr> <td>2</td> <td>4</td> </tr> <tr> <td>3</td> <td>6</td> </tr> </table>
 
-Or even as a graph with `x` as the input and `y` as the output:
+Atau bahkan sebagai grafik dengan `x` sebagai input dan `y` sebagai outputnya:
 
-<img src="images/fn_graph.png" width="300" height="300" alt="function graph" />
+<img src="images/fn_graph.png" width="300" height="300" alt="grafik fungsi" />
 
 
-There's no need for implementation details if the input dictates the output. Since functions are simply mappings of input to output, one could simply jot down object literals and run them with `[]` instead of `()`.
+Tidak perlu rincian implementasi jika input menentukan output. Karena fungsi hanyalah pemetaan input ke output, seseorang dapat dengan mudah menuliskan literal objek dan menjalankannya dengan `[]` daripada `()`.
 
 ```js
 const toLowerCase = {
@@ -129,15 +129,15 @@ const isPrime = {
 isPrime[3]; // true
 ```
 
-Of course, you might want to calculate instead of hand writing things out, but this illustrates a different way to think about functions. (You may be thinking "what about functions with multiple arguments?". Indeed, that presents a bit of an inconvenience when thinking in terms of mathematics. For now, we can bundle them up in an array or just think of the `arguments` object as the input. When we learn about *currying*, we'll see how we can directly model the mathematical definition of a function.)
+Tentu saja, Anda mungkin ingin menghitung bukan dengan dengan coretan hal tersebut, tapi ini menggambarkan cara berpikir yang berbeda mengenai fungsi. (Anda mungkin berpikir "bagaimana dengan fungsi dengan argumen yang banyak?" Memang, itu menyajikan sedikit ketidaknyamanan saat berpikir tentang aturan matematika. Untuk saat ini, kita dapat menggabungkannya dalam array atau hanya memikirkan `argumen` objek sebagai input. Ketika kita belajar tentang *currying*, kita akan melihat bagaimana kita bisa secara langsung meniru definisi matematis sebuah fungsi.)
 
-Here comes the dramatic reveal: Pure functions *are* mathematical functions and they're what functional programming is all about. Programming with these little angels can provide huge benefits. Let's look at some reasons why we're willing to go to great lengths to preserve purity.
+Begini penjelasan dramatisnya: Fungsi murni *adalah* fungsi matematis dan itu adalah pemrograman fungsional. Pemrograman dengan malaikat kecil ini bisa memberi manfaat yang besar. Mari kita lihat beberapa alasan mengapa kita rela berusaha keras untuk menjaga kemurnian.
 
-## The Case for Purity
+## Kasus untuk Kemurnian
 
-### Cacheable
+### Dapat di-chace
 
-For starters, pure functions can always be cached by input. This is typically done using a technique called memoization:
+Sebagai permulaan, fungsi murni selalu bisa di-cache dengan input. Hal ini biasanya dilakukan dengan menggunakan teknik yang disebut dengan memoization:
 
 ```js
 const squareNumber = memoize(x => x * x);
@@ -151,7 +151,7 @@ squareNumber(5); // 25
 squareNumber(5); // 25, returns cache for input 5
 ```
 
-Here is a simplified implementation, though there are plenty of more robust versions available.
+Berikut adalah implementasi yang disederhanakan, meskipun ada banyak versi yang lebih kuat yang tersedia.
 
 ```js
 const memoize = (f) => {
@@ -165,21 +165,21 @@ const memoize = (f) => {
 };
 ```
 
-Something to note is that you can transform some impure functions into pure ones by delaying evaluation:
+Yang perlu diperhatikan disini adalah Anda dapat mengubah beberapa fungsi _impure_ menjadi _pure_ dengan menunda evaluasi:
 
 ```js
 const pureHttpCall = memoize((url, params) => () => $.getJSON(url, params));
 ```
 
-The interesting thing here is that we don't actually make the http call - we instead return a function that will do so when called. This function is pure because it will always return the same output given the same input: the function that will make the particular http call given the `url` and `params`.
+Hal yang menarik di sini adalah kita sebenarnya tidak membuat panggilan http - kita malah mengembalikan fungsi yang akan melakukannya ketika dipanggil. Fungsi ini _pure_ karena akan selalu mengembalikan output yang sama dengan input yang sama: fungsi yang akan membuat panggilan http tertentu diberi `url` dan `params`.
 
-Our `memoize` function works just fine, though it doesn't cache the results of the http call, rather it caches the generated function.
+Fungsi `memoize` kita bekerja dengan baik, meskipun tidak menyimpan hasil dari panggilan http, namun cache berfungsi sebagai fungsi yang dihasilkan.
 
-This is not very useful yet, but we'll soon learn some tricks that will make it so. The takeaway is that we can cache every function no matter how destructive they seem.
+Ini belum terlalu berguna, tetapi kita akan segera mempelajari beberapa trik yang akan membuatnya berguna. Kesimpulannya adalah kita bisa menyimpan setiap fungsi tanpa peduli seberapa destruktif tampilannya.
 
-### Portable / Self-documenting
+### Portable / Mendokumentasikan-sendiri
 
-Pure functions are completely self contained. Everything the function needs is handed to it on a silver platter. Ponder this for a moment... How might this be beneficial? For starters, a function's dependencies are explicit and therefore easier to see and understand - no funny business going on under the hood.
+Fungsi _pure_ benar-benar mandiri. Semua kebutuhan fungsi diserahkan ke silver platter. Renungkan ini sejenak... Bagaimana ini bisa bermanfaat? Sebagai permulaan, dependensi fungsi bersifat eksplisit oleh karena itu lebih mudah dilihat dan dipahami - tidak ada bisnis lucu yang terjadi di bawah tenda.
 
 ```js
 // impure
@@ -195,29 +195,29 @@ const signUp = (Db, Email, attrs) => () => {
 };
 ```
 
-The example here demonstrates that the pure function must be honest about its dependencies and, as such, tell us exactly what it's up to. Just from its signature, we know that it will use a `Db`, `Email`, and `attrs` which should be telling to say the least.
+Contoh di sini menunjukkan bahwa fungsi _pure_ harus jujur tentang ketergantungannya dan, dengan demikian, beritahu kami apa masalahnya. Hanya dari tanda tangannya, kita tahu bahwa itu akan menggunakan `Db`, `Email`, dan `attrs` yang seharusnya menceritakan sedikit saja.
 
-We'll learn how to make functions like this pure without merely deferring evaluation, but the point should be clear that the pure form is much more informative than its sneaky impure counterpart which is up to who knows what.
+Kita akan belajar bagaimana membuat fungsi _pure_ seperti ini tanpa menunda evaluasi, namun intinya harus jelas bahwa bentuk _pure_ jauh lebih informatif daripada rekan liciknya _impure_ yang mana terserah siapa yang mengetahuiya.
 
-Something else to notice is that we're forced to "inject" dependencies, or pass them in as arguments, which makes our app much more flexible because we've parameterized our database or mail client or what have you (don't worry, we'll see a way to make this less tedious than it sounds). Should we choose to use a different Db we need only to call our function with it. Should we find ourselves writing a new application in which we'd like to reuse this reliable function, we simply give this function whatever `Db` and `Email` we have at the time.
+Hal lain yang perlu diperhatikan adalah bahwa kita dipaksa untuk "menyuntikkan" dependensi, atau menyebarkannya sebagai argumen, yang membuat aplikasi kita lebih fleksibel karena kita telah mem-parameterkan database atau klien email kita atau apa saja yang Anda miliki (jangan khawatir, kita akan mencari cara untuk membuatnya menjadi menarik untuk didengar). Jika kita memilih untuk menggunakan Db yang berbeda kita hanya perlu memanggil fungsi kita dengannya. Jika kita menemukan diri kita sedang menulis aplikasi baru di mana kita ingin menggunakan kembali fungsi yang andal ini, kita cukup memberikan fungsi ini `Db` dan` Email` apa pun yang kita miliki saat itu.
 
-In a JavaScript setting, portability could mean serializing and sending functions over a socket. It could mean running all our app code in web workers. Portability is a powerful trait.
+Dalam pengaturan JavaScript, portabilitas dapat berarti fungsi serialisasi dan pengiriman melalui soket. Ini bisa berarti menjalankan semua kode aplikasi kami di pekerja web. Portabilitas adalah sifat yang sangat kuat.
 
-Contrary to "typical" methods and procedures in imperative programming rooted deep in their environment via state, dependencies, and available effects, pure functions can be run anywhere our hearts desire.
+Bertentangan dengan metode dan prosedur "tipikal" dalam pemrograman imperatif yang berakar jauh di lingkungan mereka melalui _state_, ketergantungan, dan efek yang tersedia, fungsi murni dapat dijalankan sesuka hati kita.
 
-When was the last time you copied a method into a new app? One of my favorite quotes comes from Erlang creator, Joe Armstrong: "The problem with object-oriented languages is they’ve got all this implicit environment that they carry around with them. You wanted a banana but what you got was a gorilla holding the banana... and the entire jungle".
+Kapan terakhir kali Anda menyalin sebuah metode ke aplikasi baru? Salah satu kutipan favorit saya berasal dari pencipta Erlang, Joe Armstrong: "Masalah dengan bahasa object-oriented adalah mereka memiliki semua lingkungan implisit yang mereka bawa bersama mereka. Anda menginginkan pisang tetapi yang Anda dapatkan adalah seekor gorila yang memegangi pisang ... dan seluruh hutan ".
 
-### Testable
+### Dapat diuji
 
-Next, we come to realize pure functions make testing much easier. We don't have to mock a "real" payment gateway or setup and assert the state of the world after each test. We simply give the function input and assert output.
+Selanjutnya, kita menyadari bahwa fungsi _pure_ membuat pengujian menjadi lebih mudah. Kita tidak harus memojokkan gateway pembayaran "nyata" atau meng-setup dan menegaskan keadaan dunia setelah masing-masing ujian. Kami hanya memberikan input fungsi dan menegaskan output.
 
-In fact, we find the functional community pioneering new test tools that can blast our functions with generated input and assert that properties hold on the output. It's beyond the scope of this book, but I strongly encourage you to search for and try *Quickcheck* - a testing tool that is tailored for a purely functional environment.
+Sebenarnya, kita menemukan komunitas fungsional yang merintis alat uji baru yang dapat meledakkan fungsi kita dengan input yang dihasilkan dan menegaskan bahwa sifat bergantung pada output. Ini diluar cakupan buku ini, tetapi saya sangat menganjurkan Anda untuk mencari dan mencoba *Quickcheck* - alat uji yang disesuaikan untuk lingkungan fungsional semata.
 
-### Reasonable
+### Masuk akal
 
-Many believe the biggest win when working with pure functions is *referential transparency*. A spot of code is referentially transparent when it can be substituted for its evaluated value without changing the behavior of the program.
+Banyak yang percaya kemenangan terbesar saat bekerja dengan fungsi _pure_ adalah *transparansi referensial*. Tempat kode transparansi referensial dapat diganti dengan nilai evaluasinya tanpa mengubah tingkah laku program.
 
-Since pure functions always return the same output given the same input, we can rely on them to always return the same results and thus preserve referential transparency. Let's see an example.
+Karena fungsi _pure_ selalu mengembalikan output yang sama dengan input yang sama, kita dapat mengandalkannya untuk selalu mengembalikan hasil yang sama dan dengan menjaga transparansi referensial. Mari kita lihat sebuah contoh.
 
 ```js
 const { Map } = require('immutable');
@@ -232,45 +232,44 @@ const punch = (a, t) => (isSameTeam(a, t) ? t : decrementHP(t));
 punch(jobe, michael); // Map({name:'Michael', hp:19, team: 'green'})
 ```
 
-`decrementHP`, `isSameTeam` and `punch` are all pure and therefore referentially transparent. We can use a technique called *equational reasoning* wherein one substitutes "equals for equals" to reason about code. It's a bit like manually evaluating the code without taking into account the quirks of programmatic evaluation. Using referential transparency, let's play with this code a bit.
+`decrementHP`, `isSameTeam` dan `punch` semuanya _pure_ dan maka dari itu mereka transparansi referensial. Kita bisa menggunakan teknik yang disebut *equational reasoning* dimana satu pengganti "equals untuk equals" untuk alasan tentang kode. Ini seperti mengevaluasi kode secara manual tanpa mempertimbangkan kebiasaan evaluasi program. Dengan menggunakan transparansi referensial, mari kita bermain dengan kode ini sedikit.
 
-First we'll inline the function `isSameTeam`.
+Pertama kita akan inline fungsi `isSameTeam`.
 
 ```js
 const punch = (a, t) => (a.get('team') === t.get('team') ? t : decrementHP(t));
 ```
 
-Since our data is immutable, we can simply replace the teams with their actual value
+Karena data kita tidak berubah, kita bisa mengganti _team_ dengan nilai sebenarnya
 
 ```js
 const punch = (a, t) => ('red' === 'green' ? t : decrementHP(t));
 ```
 
-We see that it is false in this case so we can remove the entire if branch
+Kami melihat bahwa itu salah dalam kasus ini sehingga kami dapat menghapus seluruh _branch_
 
 ```js
 const punch = (a, t) => decrementHP(t);
 ```
 
-And if we inline `decrementHP`, we see that, in this case, punch becomes a call to decrement the `hp` by 1.
+Dan jika kita inline `decrementHP`, kita melihat bahwa, dalam kasus ini, _punch_ menjadi panggilan untuk mengurangi `hp` dengan 1.
 
 ```js
 const punch = (a, t) => t.set('hp', t.get('hp') - 1);
 ```
 
-This ability to reason about code is terrific for refactoring and understanding code in general. In fact, we used this technique to refactor our flock of seagulls program. We used equational reasoning to harness the properties of addition and multiplication. Indeed, we'll be using these techniques throughout the book.
+Kemampuan untuk berpikir tentang kode ini sangat hebat untuk kode refactoring dan understanding secara umum. Sebenarnya, kami menggunakan teknik ini untuk refactor program _flock of seagulls_ kami. Kami menggunakan penalaran equational untuk memanfaatkan sifat penambahan dan perkalian. Memang, kita akan menggunakan teknik-teknik ini di seluruh buku ini.
 
-### Parallel Code
+### Kode Paralel
 
-Finally, and here's the coup de grâce, we can run any pure function in parallel since it does not need access to shared memory and it cannot, by definition, have a race condition due to some side effect.
+Akhirnya, dan inilah _coup de grâce_, kita dapat menjalankan fungsi _pure_ secara paralel karena tidak memerlukan akses ke memori bersama dan tidak dapat, menurut definisi, memiliki kondisi balapan karena beberapa efek samping.
 
-This is very much possible in a server side js environment with threads as well as in the browser with web workers though current culture seems to avoid it due to complexity when dealing with impure functions.
+Ini sangat mungkin terjadi di sisi lingkungan server js dengan thread seperti di browser dengan pekerja web meskipun budaya saat ini sepertinya menghindarinya karena kompleksitas saat berhadapan dengan fungsi _impure_.
 
+## Kesimpulan
 
-## In Summary
+Kami telah melihat apa itu fungsi _pure_ dan mengapa kita, sebagai programmer fungsional, percaya bahwa itu adalah pakaian malam kucing. Sejak saat ini, kami akan berusaha untuk menulis semua fungsi kami dengan cara yang _pure_. Kami memerlukan beberapa alat tambahan untuk membantu kami melakukannya, namun sementara itu, kami akan mencoba memisahkan fungsi _impure_ dari kode _pure_ lainnya.
 
-We've seen what pure functions are and why we, as functional programmers, believe they are the cat's evening wear. From this point on, we'll strive to write all our functions in a pure way. We'll require some extra tools to help us do so, but in the meantime, we'll try to separate the impure functions from the rest of the pure code.
+Menulis program dengan fungsi _pure_ sangat sulit dilakukan tanpa beberapa alat tambahan di sabuk kita. Kita harus menyulap data dengan menyampaikan argumen di semua tempat, kita dilarang menggunakan _state_, belum lagi efeknya. Bagaimana seseorang bisa menulis program masokistik ini? Mari kita cari alat baru yang disebut _curry_.
 
-Writing programs with pure functions is a tad laborious without some extra tools in our belt. We have to juggle data by passing arguments all over the place, we're forbidden to use state, not to mention effects. How does one go about writing these masochistic programs? Let's acquire a new tool called curry.
-
-[Chapter 04: Currying](ch04.md)
+[Bab 04: Currying](ch04.md)
