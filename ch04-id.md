@@ -153,7 +153,7 @@ const filterQs = xs => filter(x => match(/q/i, x), xs);
 ---
 
 
-Menimbang fungsi berikut:
+Pertahankan fungsi berikut:
 
 ```js  
 const keepHighest = (x, y) => (x >= y ? x : y);  
