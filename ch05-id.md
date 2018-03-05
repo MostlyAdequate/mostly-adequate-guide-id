@@ -93,7 +93,7 @@ Tidak ada jawaban benar atau salah - kami hanya memasukkan lego bersamaan dengan
 Gaya pointfree berarti tidak perlu mengatakan data Anda. Permisi. Ini berarti fungsi yang tidak pernah menyebutkan data tempat mereka beroperasi. Fungsi kelas satu, currying, dan komposisi semuanya bermain dengan baik untuk menciptakan gaya ini.
 
 > Petunjuk: Versi pointfree dari `replace` & `toLowerCase` didefinisikan dalam [Lampiran C -
-> Keperluan Pointfree](./ appendix_c.md). Jangan ragu untuk melihatnya!
+> Keperluan Pointfree](./appendix_c.md). Jangan ragu untuk melihatnya!
 
 ```js
 // bukan pointfree karena kami menyebutkan data: kata
@@ -108,8 +108,8 @@ Lihat bagaimana sebagian `replace` kita terapkan? Apa yang kita lakukan adalah m
 Mari kita lihat contoh lain.
 
 ```js
-// not pointfree because we mention the data: name
-const initials = name => name.split(' ').map(compose(toUpperCase, head)).join('. ');
+// bukan pointfree karena kami menyebutkan data: nama
+const initials = nama => name.split(' ').map(compose(toUpperCase, head)).join('. ');
 
 // pointfree
 const initials2 = compose(join('. '), map(compose(toUpperCase, head)), split(' '));
@@ -150,7 +150,7 @@ const dasherize = compose(
 );
 
 dasherize('The world is a vampire');
-// TypeError: Cannot read property 'apply' of undefined
+// TypeError: Tidak bisa membaca properti 'apply' yang tidak terdefinisi
 ```
 
 Ada yang salah di sini, mari kita `trace`
@@ -165,7 +165,7 @@ const dasherize = compose(
 );
 
 dasherize('The world is a vampire');
-// after split [ 'The', 'world', 'is', 'a', 'vampire' ]
+// setelah split [ 'The', 'world', 'is', 'a', 'vampire' ]
 ```
 
 Ah! Kita perlu me-`map` `toLower` ini karena bekerja pada sebuah array.
