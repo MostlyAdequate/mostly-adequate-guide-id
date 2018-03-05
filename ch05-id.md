@@ -90,22 +90,22 @@ Tidak ada jawaban benar atau salah - kami hanya memasukkan lego bersamaan dengan
 
 ## Pointfree
 
-Pointfree style means never having to say your data. Excuse me. It means functions that never mention the data upon which they operate. First class functions, currying, and composition all play well together to create this style.
+Gaya pointfree berarti tidak perlu mengatakan data Anda. Permisi. Ini berarti fungsi yang tidak pernah menyebutkan data tempat mereka beroperasi. Fungsi kelas satu, currying, dan komposisi semuanya bermain dengan baik untuk menciptakan gaya ini.
 
-> Hint: Pointfree versions of `replace` & `toLowerCase` are defined in the [Appendix C -
-> Pointfree Utilities](./appendix_c.md). Do not hesitate to have a peek!
+> Petunjuk: Versi pointfree dari `replace` & `toLowerCase` didefinisikan dalam [Lampiran C -
+> Keperluan Pointfree](./ appendix_c.md). Jangan ragu untuk melihatnya!
 
 ```js
-// not pointfree because we mention the data: word
-const snakeCase = word => word.toLowerCase().replace(/\s+/ig, '_');
+// bukan pointfree karena kami menyebutkan data: kata
+const snakeCase = kata => word.toLowerCase().replace(/\s+/ig, '_');
 
 // pointfree
 const snakeCase = compose(replace(/\s+/ig, '_'), toLowerCase);
 ```
 
-See how we partially applied `replace`? What we're doing is piping our data through each function of 1 argument. Currying allows us to prepare each function to just take its data, operate on it, and pass it along. Something else to notice is how we don't need the data to construct our function in the pointfree version, whereas in the pointful one, we must have our `word` available before anything else.
+Lihat bagaimana sebagian `replace` kita terapkan? Apa yang kita lakukan adalah memilah data kita melalui masing-masing fungsi dari 1 argumen. Currying memungkinkan kita untuk mempersiapkan setiap fungsi hanya untuk mengambil datanya, beroperasi di atasnya, dan menyebarkannya. Hal lain yang perlu diperhatikan adalah bagaimana kita tidak membutuhkan data untuk membangun fungsi kita dalam versi pointfree, sedangkan yang ada disini, kita harus memiliki `kata` kita tersedia sebelum yang lainnya.
 
-Let's look at another example.
+Mari kita lihat contoh lain.
 
 ```js
 // not pointfree because we mention the data: name
@@ -117,24 +117,24 @@ const initials2 = compose(join('. '), map(compose(toUpperCase, head)), split(' '
 initials('hunter stockton thompson'); // 'H. S. T'
 ```
 
-Pointfree code can again, help us remove needless names and keep us concise and generic. Pointfree is a good litmus test for functional code as it lets us know we've got small functions that take input to output. One can't compose a while loop, for instance. Be warned, however, pointfree is a double-edged sword and can sometimes obfuscate intention. Not all functional code is pointfree and that is O.K. We'll shoot for it where we can and stick with normal functions otherwise.
+Kode pointfree lagi, bantu kami menghapus nama yang tidak perlu dan menjaga agar tetap singkat dan umum. Pointfree adalah tes lakmus yang baik untuk kode fungsional karena memungkinkan kita mengetahui bahwa kita memiliki fungsi kecil yang mengambil input untuk output. Seseorang tidak bisa menulis selagi masih disimpulkan, misalnya. Berhati-hatilah, bagaimanapun, pointfree adalah pedang bermata dua dan terkadang bisa memudarkan keinginan. Tidak semua kode fungsional adalah pointfree dan itu adalah O.K. Kita akan menembaknya di mana kita bisa dan tetap dengan fungsi normal.
 
-## Debugging
-A common mistake is to compose something like `map`, a function of two arguments, without first partially applying it.
+## Men-debug
+Kesalahan paling umum adalah menulis sesuatu seperti `map`, sebuah fungsi dari dua argumen, tanpa terlebih dahulu menerapkannya secara parsial.
 
 ```js
-// wrong - we end up giving angry an array and we partially applied map with who knows what.
+// salah - kita akhirnya memberikan angry pada sebuah array dan kita memetakan sebagian map dengan siapa yang mengetahuinya.
 const latin = compose(map, angry, reverse);
 
 latin(['frog', 'eyes']); // error
 
-// right - each function expects 1 argument.
+// benar - setiap fungsi memiliki 1 argumen.
 const latin = compose(map(angry), reverse);
 
 latin(['frog', 'eyes']); // ['EYES!', 'FROG!'])
 ```
 
-If you are having trouble debugging a composition, we can use this helpful, but impure trace function to see what's going on.
+Jika Anda mengalami masalah dalam men-debug komposisi, kita bisa menggunakan bantuan ini, tapi trace impure berfungsi untuk melihat apa yang terjadi
 
 ```js
 const trace = curry((tag, x) => {
@@ -153,7 +153,7 @@ dasherize('The world is a vampire');
 // TypeError: Cannot read property 'apply' of undefined
 ```
 
-Something is wrong here, let's `trace`
+Ada yang salah di sini, mari kita `trace`
 
 ```js
 const dasherize = compose(
@@ -168,7 +168,7 @@ dasherize('The world is a vampire');
 // after split [ 'The', 'world', 'is', 'a', 'vampire' ]
 ```
 
-Ah! We need to `map` this `toLower` since it's working on an array.
+Ah! Kita perlu me-`map` `toLower` ini karena bekerja pada sebuah array.
 
 ```js
 const dasherize = compose(
@@ -181,44 +181,44 @@ const dasherize = compose(
 dasherize('The world is a vampire'); // 'the-world-is-a-vampire'
 ```
 
-The `trace` function allows us to view the data at a certain point for debugging purposes. Languages like haskell and purescript have similar functions for ease of development.
+Fungsi `trace` memungkinkan kita melihat data pada titik tertentu untuk tujuan men-debug. Bahasa seperti haskell dan purescript memiliki fungsi yang sama untuk kemudahan pengembangan.
 
-Composition will be our tool for constructing programs and, as luck would have it, is backed by a powerful theory that ensures things will work out for us. Let's examine this theory.
-
-
-## Category Theory
-
-Category theory is an abstract branch of mathematics that can formalize concepts from several different branches such as set theory, type theory, group theory, logic, and more. It primarily deals with objects, morphisms, and transformations, which mirrors programming quite closely. Here is a chart of the same concepts as viewed from each separate theory.
-
-<img src="images/cat_theory.png" alt="category theory" />
-
-Sorry, I didn't mean to frighten you. I don't expect you to be intimately familiar with all these concepts. My point is to show you how much duplication we have so you can see why category theory aims to unify these things.
-
-In category theory, we have something called... a category. It is defined as a collection with the following components:
-
-  * A collection of objects
-  * A collection of morphisms
-  * A notion of composition on the morphisms
-  * A distinguished morphism called identity
-
-Category theory is abstract enough to model many things, but let's apply this to types and functions, which is what we care about at the moment.
-
-**A collection of objects**
-The objects will be data types. For instance, ``String``, ``Boolean``, ``Number``, ``Object``, etc. We often view data types as sets of all the possible values. One could look at ``Boolean`` as the set of `[true, false]` and ``Number`` as the set of all possible numeric values. Treating types as sets is useful because we can use set theory to work with them.
+Komposisi akan menjadi alat kita untuk membangun program dan, sebagai keberuntungan memilikinya, ia didukung oleh teori yang kuat yang memastikan segala sesuatu akan berjalan dengan baik. Mari kita periksa teori ini.
 
 
-**A collection of morphisms**
-The morphisms will be our standard every day pure functions.
+## Teori Kategori
 
-**A notion of composition on the morphisms**
-This, as you may have guessed, is our brand new toy - `compose`. We've discussed that our `compose` function is associative which is no coincidence as it is a property that must hold for any composition in category theory.
+Teori kategori adalah cabang abstrak matematika yang dapat memformalkan konsep dari beberapa cabang yang berbeda seperti teori himpunan, teori tipe, teori kelompok, logika, dan banyak lagi. Teori ini berkaitan dengan objek, morfisme, dan transformasi, yang mencerminkan pemrograman dengan cukup ketat. Berikut adalah bagan dari konsep yang sama seperti yang dilihat dari masing-masing teori yang terpisah.
 
-Here is an image demonstrating composition:
+<img src="images/cat_theory.png" alt="teori kategori" />
 
-<img src="images/cat_comp1.png" alt="category composition 1" />
-<img src="images/cat_comp2.png" alt="category composition 2" />
+Maaf, saya tidak bermaksud menakut-nakuti Anda. Saya tidak mengharapkan Anda untuk familiar dengan semua konsep ini. Maksud saya adalah menunjukkan seberapa banyak duplikasi yang kita miliki sehingga Anda dapat melihat mengapa teori kategori bertujuan untuk menyatukan hal-hal ini.
 
-Here is a concrete example in code:
+Dalam teori kategori, kita memiliki sesuatu yang disebut... sebuah kategori. Ini didefinisikan sebagai koleksi dengan komponen berikut:
+
+  * Kumpulan benda
+  * Kumpulan morfisme
+  * Gagasan komposisi pada morfisme
+  * Sebuah morfisme yang dibedakan disebut dengan identitas
+
+Teori kategori cukup abstrak untuk memodelkan banyak hal, tapi mari kita terapkan pada jenis dan fungsi, itulah yang kita pedulikan saat ini.
+
+**Kumpulan benda**
+Objek akan menjadi tipe data. Misalnya, ``String``, ``Boolean``, ``Angka``, ``Objek``, dll. Kita sering melihat tipe data sebagai kumpulan semua nilai yang memungkinkan. Orang bisa melihat ``Boolean`` sebagai himpunan `[true, false]` dan ``Angka`` sebagai himpunan semua nilai numerik yang memungkinkan. Memperlakukan jenis sebagai set berguna karena kita dapat menggunakan teori set untuk bekerja dengan mereka.
+
+
+**Kumpulan morfisme**
+Morfisme akan menjadi standar kita pada setiap fungsi pure.
+
+**Gagasan komposisi pada morfisme**
+Ini, seperti dugaan Anda, adalah mainan baru kami - `compose`. Kami telah membahas bahwa fungsi `compose` kami adalah asosiatif yang bukan kebetulan karena merupakan properti yang harus dimiliki untuk komposisi dalam teori kategori.
+
+Berikut adalah gambar yang menunjukkan komposisi:
+
+<img src="images/cat_comp1.png" alt="komposisi kategori 1" />
+<img src="images/cat_comp2.png" alt="komposisi kategori 2" />
+
+Berikut adalah contoh konkret dalam kode:
 
 ```js
 const g = x => x.length;
@@ -226,42 +226,42 @@ const f = x => x === 4;
 const isFourLetterWord = compose(f, g);
 ```
 
-**A distinguished morphism called identity**
-Let's introduce a useful function called `id`. This function simply takes some input and spits it back at you. Take a look:
+**Sebuah morfisme yang dibedakan disebut dengan identitas**
+Mari kita perkenalkan fungsi berguna yang disebut `id`. Fungsi ini hanya membutuhkan masukan dan mengeluarkannya pada Anda. Lihatlah:
 
 ```js
 const id = x => x;
 ```
 
-You might ask yourself "What in the bloody hell is that useful for?". We'll make extensive use of this function in the following chapters, but for now think of it as a function that can stand in for our value - a function masquerading as every day data.
+Anda mungkin bertanya pada diri sendiri "Apakah neraka yang berguna itu?". Kami akan memanfaatkan fungsi ini secara luas dalam bab-bab berikutnya, namun sekarang kami menganggapnya sebagai fungsi yang dapat menggantikan nilai kami - sebuah fungsi yang menyamar sebagai data setiap hari.
 
-`id` must play nicely with compose. Here is a property that always holds for every unary (unary: a one-argument function) function f:
+`id` harus digunakan dengan baik dengan compose. Berikut adalah properti yang selalu berlaku untuk setiap fungsi unary (unary: fungsi satu argumen) f:
 
 ```js
-// identity
+// identitas
 compose(id, f) === compose(f, id) === f;
-// true
+// benar
 ```
 
-Hey, it's just like the identity property on numbers! If that's not immediately clear, take some time with it. Understand the futility. We'll be seeing `id` used all over the place soon, but for now we see it's a function that acts as a stand in for a given value. This is quite useful when writing pointfree code.
+Hei, itu seperti identitas properti pada angka! Jika itu tidak jelas dengan segera, luangkan waktu demi itu. Pahami kegagalan. Kita akan melihat `id` segera digunakan di semua tempat, tapi untuk saat ini kita melihat ini adalah fungsi yang bertindak sebagai stand in untuk nilai tertentu. Ini cukup berguna saat menulis kode pointfree.
 
-So there you have it, a category of types and functions. If this is your first introduction, I imagine you're still a little fuzzy on what a category is and why it's useful. We will build upon this knowledge throughout the book. As of right now, in this chapter, on this line, you can at least see it as providing us with some wisdom regarding composition - namely, the associativity and identity properties.
+Jadi begitulah, kategori jenis dan fungsinya. Jika ini adalah pengenalan pertama Anda, saya membayangkan Anda masih sedikit kabur dalam kategori apa dan mengapa ini berguna. Kami akan membangun pengetahuan ini di seluruh buku ini. Sampai sekarang, di bab ini, pada baris ini, setidaknya Anda dapat melihatnya sebagai menyediakan kita beberapa kebijaksanaan mengenai komposisi - yaitu sifat asosiatif dan identitas.
 
-What are some other categories, you ask? Well, we can define one for directed graphs with nodes being objects, edges being morphisms, and composition just being path concatenation. We can define with Numbers as objects and `>=` as morphisms (actually any partial or total order can be a category). There are heaps of categories, but for the purposes of this book, we'll only concern ourselves with the one defined above. We have sufficiently skimmed the surface and must move on.
+Apa saja kategori lain yang Anda tanyakan? Nah, kita bisa mendefinisikan salah satu grafik terarah dengan node yang menjadi objek, bagian tepi menjadi morfisme, dan komposisi hanya merupakan serangkaian jalan. Kita dapat mendefinisikan dengan Angka sebagai objek dan `>=` sebagai morfisme (Sebenarnya order sebagian atau total bisa menjadi kategori). Ada banyak kategori, tapi untuk tujuan buku ini, kami hanya akan memperhatikan hal yang ditentukan di atas. Kita sudah menelusuri permulaan dan harus terus bergerak.
 
 
-## In Summary
-Composition connects our functions together like a series of pipes. Data will flow through our application as it must - pure functions are input to output after all, so breaking this chain would disregard output, rendering our software useless.
+## Kesimpulan
+Komposisi menghubungkan fungsi kita bersama seperti serangkaian pipa. Data akan mengalir melalui aplikasi kita karena - fungsi pure harus dimasukkan ke output setelah semuanya masuk, jadi melanggar rantai ini akan mengabaikan output, membuat perangkat lunak kita tidak berguna.
 
-We hold composition as a design principle above all others. This is because it keeps our app simple and reasonable. Category theory will play a big part in app architecture, modelling side effects, and ensuring correctness.
+Kami mempertahankan komposisi sebagai prinsip desain diatas semua yang lain. Hal ini karena akan membuat aplikasi kita tetap sederhana dan masuk akal. Teori kategori akan memainkan peran besar dalam arsitektur aplikasi, memodelkan efek samping, dan memastikan kebenaran.
 
-We are now at a point where it would serve us well to see some of this in practice. Let's make an example application.
+Sekarang kita berada pada titik di mana ia akan melayani kita dengan baik untuk melihat sebagian dari ini dalam praktik. Mari buat contoh aplikasi.
 
-[Chapter 06: Example Application](ch06.md)
+[Bab 06: Contoh Aplikasi](ch06.md)
 
-## Exercises
+## Latihan
 
-In each following exercise, we'll consider Car objects with the following shape:
+Dalam setiap latihan berikut, kami akan memperhitungkan objek Mobil dengan bentuk sebagai berikut:
 
 ```js
 {
@@ -274,7 +274,7 @@ In each following exercise, we'll consider Car objects with the following shape:
 
 
 {% exercise %}  
-Use `compose()` to rewrite the function below.  
+Gunakan `compose()` untuk menulis ulang fungsi dibawah ini.  
   
 {% initial src="./exercises/ch05/exercise_a.js#L12;" %}  
 ```js  
@@ -293,14 +293,14 @@ const isLastInStock = (cars) => {
 ---
 
 
-Considering the following function:
+Pertahankan fungsi berikut:
 
 ```js
 const average = xs => reduce(add, 0, xs) / xs.length;
 ```
 
 {% exercise %}  
-Use the helper function `average` to refactor `averageDollarValue` as a composition.  
+Gunakan fungsi pembantu `rata-rata` untuk me-refactor `averageDollarValue` sebagai komposisi.
   
 {% initial src="./exercises/ch05/exercise_b.js#L7;" %}  
 ```js  
@@ -320,8 +320,8 @@ const averageDollarValue = (cars) => {
 
 
 {% exercise %}  
-Refactor `fastestCar` using `compose()` and other functions in pointfree-style. Hint, the  
-`flip` function may come in handy.  
+Refactor `fastestCar` menggunakan `compose()` dan fungsi lainnya dalam gaya pointfree. Petunjuk,  
+fungsi `flip` function mungkin berguna.  
   
 {% initial src="./exercises/ch05/exercise_c.js#L4;" %}  
 ```js  
@@ -337,8 +337,8 @@ const fastestCar = (cars) => {
 {% context src="./exercises/support.js" %}  
 {% endexercise %}  
 
-[lodash-website]: https://lodash.com/
-[underscore-website]: http://underscorejs.org/
-[ramda-website]: http://ramdajs.com/
-[refactoring-book]: http://martinfowler.com/books/refactoring.html
-[extract-method-refactor]: http://refactoring.com/catalog/extractMethod.html
+[situs-lodash]: https://lodash.com/
+[situs-underscore]: http://underscorejs.org/
+[situs-ramda]: http://ramdajs.com/
+[buku-refactoring]: http://martinfowler.com/books/refactoring.html
+[metode-ekstrak-refactor]: http://refactoring.com/catalog/extractMethod.html
