@@ -160,7 +160,6 @@ const keepHighest = (x, y) => (x >= y ? x : y);
 ```  
 
 {% exercise %}  
-Refactor `max` to not reference any arguments using the helper function `keepHighest`.  
 Refactor `max` untuk tidak mereferensi argumen apapun dengan menggunakan fungsi pembantu `keepHighest`.
   
 {% initial src="./exercises/ch04/exercise_c.js#L7;" %}  
